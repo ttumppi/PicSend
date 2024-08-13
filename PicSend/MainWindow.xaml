@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="PicSender" Height="450" Width="800">
     <Grid x:Name="MasterGrid" >
-        <Grid x:Name="HeaderPanel">
+        <Grid x:Name="HeaderGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -19,10 +19,42 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
         </Grid>
-        <Grid x:Name="TabPanel" >
-            
+        <Grid x:Name="TabGrid" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
         </Grid>
-       
+        <Grid x:Name="ViewGrid" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+        </Grid>
+        <Grid x:Name="FooterGrid" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+        </Grid>
     </Grid>
     
 
