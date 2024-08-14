@@ -11,12 +11,50 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="0.3*" />
             <RowDefinition Height="0.5*" />
             <RowDefinition Height="3*" />
-            <RowDefinition Height="0.5*" />
+            <RowDefinition Height="0.3*" />
         </Grid.RowDefinitions>
-        <Grid x:Name="HeaderGrid" Grid.Row="0" Grid.Column="0" Background="DarkCyan">
+        <Grid x:Name="HeaderGrid" Grid.Row="0" Grid.Column="0" Background="LightCyan" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label x:Name="HeaderLabel" Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                   FontSize="26" FontFamily="Calibri Bold" Padding="0" Margin="0,-5,0,0" >PicSender</Label>
+            <Label x:Name="VersionLabel" Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                   FontSize="12" FontFamily="Verdana" Padding="0,0,1,0" Margin="1,1,1,1">Current Version Number</Label>
+            
+        </Grid>
+        <Grid x:Name="TabGrid" Grid.Row="1" Grid.Column="0" Background="AliceBlue">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch" Grid.RowSpan="3" FontFamily="Verdana" FontSize="20" >Main</Button>
+            <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" Grid.RowSpan="3" FontFamily="Verdana" FontSize="20" >Settings</Button>
+            <Button Grid.Row="0" Grid.Column="2" VerticalAlignment="Stretch" Grid.RowSpan="3" FontFamily="Verdana" FontSize="20" >Log</Button>
+            <Button Grid.Row="0" Grid.Column="3" VerticalAlignment="Stretch" Grid.RowSpan="3" FontFamily="Verdana" FontSize="20" >Info</Button>
+            <Button Grid.Row="0" Grid.Column="4" VerticalAlignment="Stretch" Grid.RowSpan="3" FontFamily="Verdana" FontSize="20" >Exit</Button>
+
+        </Grid>
+        <Grid x:Name="ViewGrid" Grid.Row="2" Grid.Column="0" Background="Gray">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -30,35 +68,7 @@
 
             
         </Grid>
-        <Grid x:Name="TabGrid" Grid.Row="1" Grid.Column="0" Background="Cyan">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            
-        </Grid>
-        <Grid x:Name="ViewGrid" Grid.Row="2" Grid.Column="0" Background="Yellow">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            
-        </Grid>
-        <Grid x:Name="FooterGrid" Grid.Row="3" Grid.Column="0" Background="DarkCyan">
+        <Grid x:Name="FooterGrid" Grid.Row="3" Grid.Column="0" Background="LightCyan">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
