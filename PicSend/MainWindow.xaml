@@ -19,16 +19,20 @@
         <Grid x:Name="HeaderGrid" Grid.Row="0" Grid.Column="0" Background="LightCyan" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label x:Name="HeaderLabel" Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                   FontSize="26" FontFamily="Calibri Bold" Padding="0" Margin="0,-5,0,0" >PicSender</Label>
+
+            <Viewbox Grid.Row="0" Grid.Column="1" Grid.RowSpan="3">
+                <TextBlock Text="PicSender" FontSize="26" FontFamily="Calibri Bold"></TextBlock>
+            </Viewbox>
+            
+            
             <Label x:Name="VersionLabel" Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Right"
                    FontSize="12" FontFamily="Verdana" Padding="0,0,1,0" Margin="1,1,1,1">Current Version Number</Label>
             
