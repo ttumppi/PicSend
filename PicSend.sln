@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicSend", "PicSend\PicSend.csproj", "{06675559-7E16-43B7-A645-2591EABBC359}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PicSend", "PicSend\PicSend.csproj", "{06675559-7E16-43B7-A645-2591EABBC359}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PicSendTests", "PicSendTests\PicSendTests.csproj", "{999CADD4-A85F-4A76-9DB6-6FE187E2A8A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{06675559-7E16-43B7-A645-2591EABBC359}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06675559-7E16-43B7-A645-2591EABBC359}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06675559-7E16-43B7-A645-2591EABBC359}.Release|Any CPU.Build.0 = Release|Any CPU
+		{999CADD4-A85F-4A76-9DB6-6FE187E2A8A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{999CADD4-A85F-4A76-9DB6-6FE187E2A8A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{999CADD4-A85F-4A76-9DB6-6FE187E2A8A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{999CADD4-A85F-4A76-9DB6-6FE187E2A8A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
