@@ -1,13 +1,13 @@
-﻿using PicSend;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using VersionUpdater;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VersionUpdater;
+using System.Diagnostics;
 
-namespace PicSend.Tests
+namespace VersionUpdater.Tests
 {
     [TestClass()]
     public class VersionUpdaterTests
@@ -16,7 +16,6 @@ namespace PicSend.Tests
         public void UpdateTest()
         {
             
-           
         }
     }
 }
