@@ -2,50 +2,117 @@
 using System.Windows;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PicSend
 {
     public static class VersionUpdater
     {
+        public static string CurrentVersion { get; private set; } = string.Empty;
+        private static object _fileLock = new object();
+
+        static  VersionUpdater()
+        {
+            SetCurrentVersion();
+        }
         public static void Update()
         {
             try
             {
-                string ProjectDataFolderPath = GetProjectDataFolderPath();
-
-                if (ProjectDataFolderPath == string.Empty)
+                lock (_fileLock)
                 {
-                    throw new Exception();    
+                    string ProjectDataFolderPath = GetProjectDataFolderPath();
+
+                    if (ProjectDataFolderPath == string.Empty)
+                    {
+                        throw new Exception("Could not find Project Data folder");
+                    }
+
+                    string versionFilePath = Path.Combine(ProjectDataFolderPath, "Version.json");
+
+                    string fileContent = string.Empty;
+
+                    FileStream? readStream = null;
+                    StreamReader? streamReader = null;
+                    try
+                    {
+                        readStream = new FileStream(versionFilePath, FileMode.Open);
+                        streamReader = new StreamReader(readStream);
+
+                        fileContent = streamReader.ReadToEnd();
+                        readStream.Dispose();
+                        streamReader.Dispose();
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception($"Failed to open Version file for read : {e.Message}");
+                    }
+
+                    finally
+                    {
+                        readStream?.Close();
+                        streamReader?.Close();
+                    }
+                    
+                    
+
+                    if (fileContent == string.Empty)
+                    {
+
+                    }
+
+
+                    ProjectData? projectData = JsonSerializer.Deserialize<ProjectData>(fileContent);
+
+
+
+
+
+                    if (projectData is null)
+                    {
+                        throw new Exception("Project Data is null");
+                    }
+
+                    projectData.IncrementVersion();
+
+                    CurrentVersion = projectData.ProjectVersion;
+
+                    using (StreamWriter writer = new StreamWriter(versionFilePath))
+                    {
+                        string updatedVersionData = JsonSerializer.Serialize(projectData);
+
+                        writer.Write(updatedVersionData);
+                    }
                 }
-                string VersionFilePath = Path.Combine(ProjectDataFolderPath, "Version.json");
-
-                string fileContent = File.ReadAllText(VersionFilePath);
-
-
-                ProjectData? projectData = JsonSerializer.Deserialize<ProjectData>(fileContent);
-
                 
-                
-                
-
-                if (projectData is null)
-                {
-                    throw new Exception();
-                }
-
-                projectData.IncrementVersion();
-
-                using (StreamWriter writer = new StreamWriter(VersionFilePath))
-                {
-                    string updatedVersionData  = JsonSerializer.Serialize(projectData);
-
-                    writer.Write(updatedVersionData);
-                }
             }
-            catch
+            catch(Exception ex)
             {
-                throw new Exception("Failed to update build version"); 
+                throw new Exception($"Failed to update build version : {ex.Message}"); 
             }
+        }
+
+        private static void SetCurrentVersion()
+        {
+            string ProjectDataFolderPath = GetProjectDataFolderPath();
+
+            if (ProjectDataFolderPath == string.Empty)
+            {
+                return;
+            }
+            string VersionFilePath = Path.Combine(ProjectDataFolderPath, "Version.json");
+
+            string fileContent = File.ReadAllText(VersionFilePath);
+
+
+            ProjectData? projectData = JsonSerializer.Deserialize<ProjectData>(fileContent);
+
+            if (projectData is null)
+            {
+                return;
+            }
+
+            CurrentVersion = projectData.ProjectVersion;
         }
 
         private static string GetProjectDataFolderPath()
@@ -70,6 +137,7 @@ namespace PicSend
 
     public class ProjectData
     {
+        [JsonInclude]
         public string ProjectVersion { get; private set; } = "00.00.01";
 
 
@@ -109,9 +177,18 @@ namespace PicSend
         {
             string version = string.Empty;
 
+            int currentIndex = 0;
             foreach (VersionPart part in VersionNumber)
             {
-                version += part.ToString() + ".";
+                if (currentIndex != VersionNumber.Length -1)
+                {
+                    version += part.ToString() + ".";
+                }
+                else
+                {
+                    version += part.ToString();
+                }
+                currentIndex++;
             }
 
             return version;
@@ -145,13 +222,28 @@ namespace PicSend
         public void Increment()
         {
            for (int i = VersionNumber.Length -1; i > -1; i--)
-            {
+           {
                 VersionNumber[i].Increment();
-                if (VersionNumber[i].First != 0)
+                if (VersionPartReset(VersionNumber[i]))
                 {
-                    break;
+                    continue;
                 }
+                break;
+           }
+        }
+
+        private void IncrementNextVersion(int versionPartIndex)
+        {
+            if (versionPartIndex > VersionNumber.Length - 1)
+            {
+                return;
             }
+            VersionNumber[versionPartIndex].Increment();
+        }
+
+        private bool VersionPartReset(VersionPart versionPart)
+        {
+            return versionPart.Second == 0 && versionPart.First == 0;
         }
     }
 

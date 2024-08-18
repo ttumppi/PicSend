@@ -1,6 +1,7 @@
 ﻿using PicSend;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,12 @@ namespace PicSend.Tests
         {
             try
             {
-                VersionUpdater.Update();
+                for (int i = 0; i < 30000; i++)
+                {
+                    VersionUpdater.Update();
+                    Debug.WriteLine(VersionUpdater.CurrentVersion);
+                }
+                
 
                 Assert.IsTrue(true);
             }
