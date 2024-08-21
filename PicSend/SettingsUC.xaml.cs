@@ -21,12 +21,16 @@ namespace PicSend
     /// </summary>
     public partial class SettingsUC : UserControl
     {
-        string _pictureFolder;
+
+        private string PictureFolderPath { get; set; } = string.Empty;
+
+        
+        public AppSettings Settings { get; }
         public SettingsUC()
         {
             InitializeComponent();
-            _pictureFolder = string.Empty;
-            PictureFolderPathTextBlock.Text = _pictureFolder;
+            PictureFolderPathTextBlock.Text = string.Empty;
+            Settings = new AppSettings(this);
         }
 
         private void FolderSelectButton_Click(object sender, RoutedEventArgs e)
@@ -35,8 +39,25 @@ namespace PicSend
 
             if ((bool)folderDialog.ShowDialog())
             {
-                _pictureFolder = folderDialog.FolderName;
-                PictureFolderPathTextBlock.Text = _pictureFolder;
+                PictureFolderPath = folderDialog.FolderName;
+                PictureFolderPathTextBlock.Text = folderDialog.FolderName;
+            }
+        }
+
+
+       
+        public class AppSettings
+        {
+            SettingsUC _settingsUC;
+            public string PictureFolderPath
+            {
+                get { return _settingsUC.PictureFolderPath; }
+            }
+
+
+            public AppSettings(SettingsUC settingsUC)
+            {
+                _settingsUC = settingsUC;
             }
         }
     }

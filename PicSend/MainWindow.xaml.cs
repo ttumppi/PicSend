@@ -26,6 +26,7 @@ namespace PicSend
             InitializeComponent();
             _threadCloser = new ThreadCloser();
             CreateUserControls();
+            
         }
 
         private void CreateUserControls()
