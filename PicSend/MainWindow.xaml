@@ -52,8 +52,8 @@
             </Grid.RowDefinitions>
 
             
-            <Button x:Name="MainButton" Grid.Column="0" VerticalAlignment="Stretch" Grid.RowSpan="3" FontFamily="Verdana" FontSize="20" >Main</Button>
-            <Button x:Name="SettingsButton" Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" Grid.RowSpan="3" FontFamily="Verdana" FontSize="20" >Settings</Button>
+            <Button x:Name="MainButton" Grid.Column="0" VerticalAlignment="Stretch" Grid.RowSpan="3" FontFamily="Verdana" FontSize="20" Click="MainButton_Click" >Main</Button>
+            <Button x:Name="SettingsButton" Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" Grid.RowSpan="3" FontFamily="Verdana" FontSize="20" Click="SettingsButton_Click" >Settings</Button>
             <Button x:Name="LogButton" Grid.Row="0" Grid.Column="2" VerticalAlignment="Stretch" Grid.RowSpan="3" FontFamily="Verdana" FontSize="20" >Log</Button>
             <Button x:Name="InfoButton" Grid.Row="0" Grid.Column="3" VerticalAlignment="Stretch" Grid.RowSpan="3" FontFamily="Verdana" FontSize="20" >Info</Button>
             <Button x:Name="ExitButton" Grid.Row="0" Grid.Column="4" VerticalAlignment="Stretch" Grid.RowSpan="3" FontFamily="Verdana" FontSize="20" Click="ExitButton_Click"  >Exit</Button>

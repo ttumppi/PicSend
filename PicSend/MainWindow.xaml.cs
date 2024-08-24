@@ -21,17 +21,37 @@ namespace PicSend
     public partial class MainWindow : Window
     {
         ThreadCloser _threadCloser;
+
         SettingsUC _settingsUC;
+        MainUserControl _mainUserControl;
+
         SettingsUC.AppSettings _appSettings;
+
+        Dictionary<UserControls, UserControl> _userControls;
+
+        SolidColorBrush _selectedButtonColor;
+
+        Brush _nonSelectedButton;
+
+        Queue<Button> _pressedButtons;
+
         public MainWindow()
         {
             CreateConfigFolderIfNonExistent();
             InitializeComponent();
             _threadCloser = new ThreadCloser();
+            _userControls = new Dictionary<UserControls, UserControl>();
+
             CreateUserControls();
             _appSettings = _settingsUC.Settings;
 
+            _selectedButtonColor = new SolidColorBrush(Colors.LightBlue);
+            _nonSelectedButton = MainButton.Background;
+
+            MainButton.Background = _selectedButtonColor;
             
+            _pressedButtons = new Queue<Button>();
+            _pressedButtons.Enqueue(MainButton);
         }
 
         private void CreateConfigFolderIfNonExistent()
@@ -46,6 +66,12 @@ namespace PicSend
         {
             _settingsUC = new SettingsUC();
             ViewGrid.Children.Add( _settingsUC );
+            _userControls.Add(UserControls.Settings, _settingsUC );
+
+            _mainUserControl = new MainUserControl(_settingsUC.Settings);
+            ViewGrid.Children.Add( _mainUserControl );
+            _userControls.Add(UserControls.MainView, _mainUserControl );
+
         }
 
        
@@ -79,6 +105,47 @@ namespace PicSend
             e.Cancel = true;
             
             _threadCloser.CloseAll(CloseApplication);
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            _pressedButtons.Dequeue().Background = _nonSelectedButton;
+            _pressedButtons.Enqueue(SettingsButton);
+            SettingsButton.Background = _selectedButtonColor;
+
+            BringToFront(UserControls.Settings);
+        }
+
+        private void MainButton_Click(object sender, RoutedEventArgs e)
+        {
+            _pressedButtons.Dequeue().Background = _nonSelectedButton;
+            _pressedButtons.Enqueue(MainButton);
+            MainButton.Background = _selectedButtonColor;
+
+            BringToFront(UserControls.MainView);
+        }
+
+        private void BringToFront(UserControls ucControl)
+        {
+            foreach (KeyValuePair<UserControls, UserControl> pair in _userControls)
+            {
+                if (pair.Key == ucControl)
+                {
+                    Panel.SetZIndex(pair.Value, 1);
+                }
+                else
+                {
+                    Panel.SetZIndex(pair.Value, 0);
+                }
+            }
+        }
+
+
+        public enum UserControls
+        {
+            None = 0,
+            MainView = 1,
+            Settings = 2,
         }
     }
 }
