@@ -12,7 +12,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.IO;
+using System.Text.Json.Serialization;
+using System.Reflection;
 
 namespace PicSend
 {
@@ -22,16 +24,40 @@ namespace PicSend
     public partial class SettingsUC : UserControl
     {
 
-        private string PictureFolderPath { get; set; } = string.Empty;
-
+        private IAppSettings _modifiableSettings;
         
-        public AppSettings Settings { get; }
+        public AppSettings Settings { get; private set; }
         public SettingsUC()
         {
             InitializeComponent();
-            PictureFolderPathTextBlock.Text = string.Empty;
-            Settings = new AppSettings(this);
+
+            Settings = TryReadSettingsFromFile();
+            _modifiableSettings = Settings;
+            ChangePictureFolderPath(Settings.PictureFolderPath);
+            
+           
+            
         }
+
+        private AppSettings TryReadSettingsFromFile()
+        {
+            AppSettings? settings = JsonReadWrite.ReadObject<AppSettings>(AppSettings.AppSettingsPath);
+
+            if (settings is null)
+            {
+                return new AppSettings();
+            }
+
+            return settings;
+        }
+
+        private void ChangePictureFolderPath(string path)
+        {
+            _modifiableSettings.PictureFolderPath = path;
+            PictureFolderPathTextBlock.Text = path;
+        }
+
+       
 
         private void FolderSelectButton_Click(object sender, RoutedEventArgs e)
         {
@@ -39,26 +65,60 @@ namespace PicSend
 
             if ((bool)folderDialog.ShowDialog())
             {
-                PictureFolderPath = folderDialog.FolderName;
-                PictureFolderPathTextBlock.Text = folderDialog.FolderName;
+                ChangePictureFolderPath(folderDialog.FolderName);
             }
         }
 
 
        
-        public class AppSettings
+        public class AppSettings : IAppSettings
         {
-            SettingsUC _settingsUC;
+
+
+            [JsonPropertyName("Picture Save Folder")]
+            [JsonInclude]
             public string PictureFolderPath
             {
-                get { return _settingsUC.PictureFolderPath; }
+                get;
+                private set;
+            } = string.Empty;
+
+            [JsonIgnore]
+            string IAppSettings.PictureFolderPath 
+            { 
+                get { return PictureFolderPath; }
+                set { PictureFolderPath = value; } 
             }
 
+            [JsonIgnore]
+            public static string ConfigFolderPath { get;  } = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config");
 
-            public AppSettings(SettingsUC settingsUC)
+            [JsonIgnore]
+            public static string AppSettingsPath { get;  } = Path.Combine(ConfigFolderPath, "AppSettings.JSON");
+
+
+            public AppSettings()
             {
-                _settingsUC = settingsUC;
+                CreateAppSettingsFileIfNonExistent();
             }
+
+            
+
+            private void CreateAppSettingsFileIfNonExistent()
+            {
+                if (!File.Exists(AppSettingsPath))
+                {
+                    File.Create(AppSettingsPath).Close();
+                }
+            }
+
+           
+        }
+
+
+        private interface IAppSettings
+        {
+            string PictureFolderPath { get; set; }
         }
     }
 }

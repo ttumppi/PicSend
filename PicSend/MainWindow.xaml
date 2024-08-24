@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PicSend"
         mc:Ignorable="d"
-        Title="PicSender" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="PicSender" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid x:Name="MasterGrid" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

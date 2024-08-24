@@ -11,6 +11,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using VersionUpdater;
+using System.IO;
 
 namespace PicSend
 {
@@ -21,12 +22,24 @@ namespace PicSend
     {
         ThreadCloser _threadCloser;
         SettingsUC _settingsUC;
+        SettingsUC.AppSettings _appSettings;
         public MainWindow()
         {
+            CreateConfigFolderIfNonExistent();
             InitializeComponent();
             _threadCloser = new ThreadCloser();
             CreateUserControls();
+            _appSettings = _settingsUC.Settings;
+
             
+        }
+
+        private void CreateConfigFolderIfNonExistent()
+        {
+            if (!Directory.Exists(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config")))
+            {
+                Directory.CreateDirectory(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config"));
+            }
         }
 
         private void CreateUserControls()
@@ -34,6 +47,8 @@ namespace PicSend
             _settingsUC = new SettingsUC();
             ViewGrid.Children.Add( _settingsUC );
         }
+
+       
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -50,12 +65,20 @@ namespace PicSend
         {
             if (!Dispatcher.CheckAccess())
             {
-                Dispatcher.Invoke(CloseApplication);
+                Dispatcher.BeginInvoke(new Action(CloseApplication));
                 return;
             }
 
+            JsonReadWrite.WriteObject<SettingsUC.AppSettings>(SettingsUC.AppSettings.AppSettingsPath, _appSettings);
 
             Application.Current.Shutdown();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            
+            _threadCloser.CloseAll(CloseApplication);
         }
     }
 }
