@@ -14,32 +14,32 @@ namespace PicSend
         const string _endOfMessage = ";;;";
         BroadCastClientSocket _broadCastClient;
         ServerSocket _serverSocket;
-        CommunicationMode _currentCommunication;
 
         public PictureCommunication()
         {
             _broadCastClient = new BroadCastClientSocket(25555, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.IPv4, _endOfMessage);
-            _serverSocket =  new ServerSocket(35555, SocketType.Stream, ProtocolType.Tcp, ServerSocket.ServerNotificationMode.OnCompleteMessage, _endOfMessage);
-            
+            _serverSocket =  new ServerSocket(35555, SocketType.Stream, ProtocolType.Tcp, _endOfMessage);
 
+            _serverSocket.OnConnectionStateChanged += OnCommunicationStateChange;
+            _serverSocket.OnPictureReceived += OnPictureReceived;
         }
 
         public void Start()
         {
             _broadCastClient.StartPollingMessage(_endOfMessage);
-            _currentCommunication = CommunicationMode.BroadCast;
+            _serverSocket.StartListening();
         }
 
-
-
-
-        private enum CommunicationMode
+        private void OnCommunicationStateChange(object? sender, ServerSocket.ConnectionChangedEventArgs.ConnectionState state)
         {
-            None = 0,
-            BroadCast = 1,
-            Server = 2,
+
         }
 
+
+        private void OnPictureReceived(object? sender, PictureData data)
+        {
+
+        }
         
     }
 }
