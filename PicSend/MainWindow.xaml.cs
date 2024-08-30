@@ -43,6 +43,7 @@ namespace PicSend
             InitializeComponent();
             _threadCloser = new ThreadCloser();
             _userControls = new Dictionary<UserControls, UserControl>();
+            ModifyControls();
 
             CreateUserControls();
             _appSettings = _settingsUC.Settings;
@@ -60,6 +61,12 @@ namespace PicSend
 
             _pictureComms.Start();
 
+        }
+
+        private void ModifyControls()
+        {
+            LogButton.Visibility = Visibility.Collapsed;
+            InfoButton.Visibility = Visibility.Collapsed;
         }
 
         private void CreateConfigFolderIfNonExistent()
@@ -117,18 +124,20 @@ namespace PicSend
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            _pressedButtons.Dequeue().Background = _nonSelectedButton;
-            _pressedButtons.Enqueue(SettingsButton);
-            SettingsButton.Background = _selectedButtonColor;
-
+            ChangeSelectedButton(SettingsButton);
             BringToFront(UserControls.Settings);
+        }
+
+        private void ChangeSelectedButton(Button selected)
+        {
+            _pressedButtons.Dequeue().Background = _nonSelectedButton;
+            _pressedButtons.Enqueue(selected);
+            selected.Background = _selectedButtonColor;
         }
 
         private void MainButton_Click(object sender, RoutedEventArgs e)
         {
-            _pressedButtons.Dequeue().Background = _nonSelectedButton;
-            _pressedButtons.Enqueue(MainButton);
-            MainButton.Background = _selectedButtonColor;
+            ChangeSelectedButton(MainButton);
 
             BringToFront(UserControls.MainView);
         }
