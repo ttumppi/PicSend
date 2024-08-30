@@ -56,8 +56,10 @@ namespace PicSend
             _pressedButtons.Enqueue(MainButton);
 
             _pictureComms = new PictureCommunication(_appSettings);
+            _threadCloser.Add(_pictureComms);
 
             _pictureComms.Start();
+
         }
 
         private void CreateConfigFolderIfNonExistent()

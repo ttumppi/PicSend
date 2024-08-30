@@ -11,7 +11,7 @@ using System.IO;
 
 namespace PicSend
 {
-    internal class PictureCommunication
+    internal class PictureCommunication : IShutdown
     {
         const string _endOfMessage = ";;;";
         BroadCastClientSocket _broadCastClient;
@@ -45,6 +45,12 @@ namespace PicSend
         {
             _broadCastClient.StartPollingMessage(_endOfMessage);
             _serverSocket.StartListening();
+        }
+
+        public void Shutdown()
+        {
+            _broadCastClient.ShutDown();
+            _serverSocket.ShutDown();
         }
 
         private void OnCommunicationStateChange(object? sender, ServerSocket.ConnectionChangedEventArgs.ConnectionState state)
