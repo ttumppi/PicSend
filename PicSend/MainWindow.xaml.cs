@@ -35,6 +35,8 @@ namespace PicSend
 
         Queue<Button> _pressedButtons;
 
+        PictureCommunication _pictureComms;
+
         public MainWindow()
         {
             CreateConfigFolderIfNonExistent();
@@ -52,6 +54,10 @@ namespace PicSend
             
             _pressedButtons = new Queue<Button>();
             _pressedButtons.Enqueue(MainButton);
+
+            _pictureComms = new PictureCommunication(_appSettings);
+
+            _pictureComms.Start();
         }
 
         private void CreateConfigFolderIfNonExistent()

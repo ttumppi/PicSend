@@ -34,6 +34,7 @@ namespace TestConsole
             _protocolType = protocolType;
             _socket = new Socket(_endPoint.AddressFamily, _socketType, _protocolType);
             _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
+            _socket.EnableBroadcast = true;
             _socket.Connect(_endPoint);
             _isPolling = false;
             _messageEnd = messageEnd;
