@@ -26,7 +26,7 @@ namespace PicSend
 
         public bool Update(TEnum newState)
         {
-            if (_currentState.Equals(_currentState))
+            if (_currentState.Equals(newState))
             {
                 return false;
             }

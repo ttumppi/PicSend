@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using VersionUpdater;
 using System.IO;
+using ReceiptManager;
 
 namespace PicSend
 {
@@ -58,6 +59,7 @@ namespace PicSend
 
             _pictureComms = new PictureCommunication(_appSettings);
             _threadCloser.Add(_pictureComms);
+            _pictureComms.ConnectionChanged += ConnectionStateChanged;
 
             _pictureComms.Start();
 
@@ -100,6 +102,20 @@ namespace PicSend
         {
             _threadCloser.CloseAll(CloseApplication);
 
+        }
+
+        private void ConnectionStateChanged(object? sender, ServerSocket.ConnectionChangedEventArgs.ConnectionState state)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    ConnectionStateChanged(sender, state);
+                }));
+                return;
+            }
+
+            _mainUserControl.ChangeConnectionStatusText(state.ToString());
         }
 
         private void CloseApplication()

@@ -28,5 +28,20 @@ namespace PicSend
             ConnectionStateLabel.Text = "Disconnected";
             _appSettings = settings;
         }
+
+        public void ChangeConnectionStatusText(string status)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    ChangeConnectionStatusText(status);
+
+                }));
+                return;
+            }
+
+            ConnectionStateLabel.Text = status;
+        }
     }
 }
