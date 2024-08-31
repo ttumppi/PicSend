@@ -33,8 +33,8 @@ namespace PicSend
 
         public PictureCommunication(SettingsUC.AppSettings settings)
         {
-            _broadCastClient = new BroadCastClientSocket(25555, System.Net.Sockets.SocketType.Dgram, System.Net.Sockets.ProtocolType.Udp, _endOfMessage);
-            _serverSocket =  new ServerSocket(35555, SocketType.Stream, ProtocolType.Tcp, _endOfMessage);
+            _broadCastClient = new BroadCastClientSocket(23499, System.Net.Sockets.SocketType.Dgram, System.Net.Sockets.ProtocolType.Udp, _endOfMessage);
+            _serverSocket =  new ServerSocket(23399, SocketType.Stream, ProtocolType.Tcp, _endOfMessage);
             _appSettings = settings;
 
             _serverSocket.OnConnectionStateChanged += OnCommunicationStateChange;
@@ -53,9 +53,20 @@ namespace PicSend
             _serverSocket.ShutDown();
         }
 
+     
+
         private void OnCommunicationStateChange(object? sender, ServerSocket.ConnectionChangedEventArgs.ConnectionState state)
         {
             ConnectionChanged?.Invoke(sender, state);
+
+            if (state.Equals(ServerSocket.ConnectionChangedEventArgs.ConnectionState.Connected))
+            {
+                _broadCastClient.ShutDown();
+            }
+            else
+            {
+                _broadCastClient.StartPollingMessage(_endOfMessage);
+            }
         }
 
 

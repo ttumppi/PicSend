@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using PicSend;
 using System.Text.Json;
+using System.Text.Unicode;
 
 namespace ReceiptManager
 {
@@ -96,7 +97,18 @@ namespace ReceiptManager
 
                         string payload = GetStringFromBytes(finalBytes);
 
-                        PictureData? picData = JsonSerializer.Deserialize<PictureData>(payload);
+                        PictureData? picData = null;
+
+                        try
+                        {
+                            picData = JsonSerializer.Deserialize<PictureData>(payload);
+                        }
+
+                        catch(Exception e)
+                        {
+                            bytesReceived = new List<byte[]>();
+                        }
+
 
                         bytesReceived = new List<byte[]>();
 
