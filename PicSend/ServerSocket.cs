@@ -26,6 +26,8 @@ namespace ReceiptManager
         string _endOfMessage;
         Thread _commThread;
         StateHandler<ConnectionChangedEventArgs.ConnectionState> _stateHandler;
+        JsonByteArrayConverter _jsonByteArrayConverter;
+        JsonSerializerOptions _jsonOptions;
 
       
 
@@ -51,6 +53,10 @@ namespace ReceiptManager
             _stateHandler.Update(ConnectionChangedEventArgs.ConnectionState.Disconnected);
 
             _commThread = new Thread(new ThreadStart(Communication));
+
+            _jsonByteArrayConverter = new JsonByteArrayConverter();
+            _jsonOptions = new JsonSerializerOptions();
+            _jsonOptions.Converters.Add(_jsonByteArrayConverter);
         }
 
         private void Communication()
@@ -97,11 +103,17 @@ namespace ReceiptManager
 
                         string payload = GetStringFromBytes(finalBytes);
 
+                        if (payload == string.Empty)
+                        {
+                            bytesReceived = new List<byte[]>();
+                            continue;
+                        }
+
                         PictureData? picData = null;
 
                         try
                         {
-                            picData = JsonSerializer.Deserialize<PictureData>(payload);
+                            picData = JsonSerializer.Deserialize<PictureData>(payload, _jsonOptions);
                         }
 
                         catch(Exception e)
