@@ -65,6 +65,7 @@ namespace PicSend
             }
             else
             {
+                _broadCastClient = new BroadCastClientSocket(23499, System.Net.Sockets.SocketType.Dgram, System.Net.Sockets.ProtocolType.Udp, _endOfMessage);
                 _broadCastClient.StartPollingMessage(_endOfMessage);
             }
         }
@@ -72,43 +73,45 @@ namespace PicSend
 
         private void OnPictureReceived(object? sender, PictureData data)
         {
-            Image? img = CreateImage(data);
+            CreateAndSaveImage(data);
 
-            if (img is null)
-            {
-                return;
-            }
+            
 
-            img.Save(Path.Combine(_appSettings.PictureFolderPath, data.Name));
+            
         }
 
 
-        private Image? CreateImage(PictureData picData)
+        private void CreateAndSaveImage(PictureData picData)
         {
-            Image img = null;
+            
             using (MemoryStream stream = new MemoryStream())
             {
                 stream.Write(picData.PicData, 0, picData.PicData.Length);
 
-                img = Image.FromStream(stream);
+                Image img = Image.FromStream(stream);
 
                 RotateImageToCorrectOrientation(img, picData.OrientationByte);
+
+                img.Save(Path.Combine(_appSettings.PictureFolderPath, picData.Name + ".png"));
             }
 
-            return img;
             
 
         }
         
         private void RotateImageToCorrectOrientation(Image image, byte imageOrientation)
         {
+            if (!Enum.IsDefined(typeof(Orientation), imageOrientation))
+            {
+                return;
+            }
 
             image.RotateFlip(_rotationActions[(Orientation)imageOrientation]);
         }
 
         private enum Orientation : byte
         {
-            None = 1,
+            
             FlipX = 2,
             FlipXY = 3,
             FlipY = 4,
