@@ -75,9 +75,6 @@ namespace PicSend
         {
             CreateAndSaveImage(data);
 
-            
-
-            
         }
 
 
