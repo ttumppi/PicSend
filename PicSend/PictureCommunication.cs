@@ -90,6 +90,8 @@ namespace PicSend
                 RotateImageToCorrectOrientation(img, picData.OrientationByte);
 
                 img.Save(Path.Combine(_appSettings.PictureFolderPath, picData.Name + ".png"));
+
+                img.Dispose();
             }
 
             
