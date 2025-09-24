@@ -31,7 +31,7 @@ namespace TestConsole
         public BroadCastClientSocket(int port,  SocketType socketType, ProtocolType protocolType, string messageEnd)
         {
             _mAddress = IPAddress.Parse("224.168.100.2");
-            _mEndPoint = new IPEndPoint(_mAddress, 23000);
+            _mEndPoint = new IPEndPoint(_mAddress, port);
             _ipAddress = GetIPAddress();
             _localEndPoint = new IPEndPoint(_ipAddress, port);
             _socketType = socketType;
