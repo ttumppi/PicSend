@@ -12,8 +12,10 @@ namespace TestConsole
     public class BroadCastClientSocket
     {
         Socket _socket;
-        readonly IPAddress _ipAddress = IPAddress.Parse("192.168.1.255");
-        IPEndPoint _endPoint;
+        readonly IPAddress _ipAddress;
+        readonly IPAddress _mAddress;
+        IPEndPoint _localEndPoint;
+        IPEndPoint _mEndPoint;
         SocketType _socketType;
         ProtocolType _protocolType;
         private volatile bool _isPolling;
@@ -28,23 +30,32 @@ namespace TestConsole
         }
         public BroadCastClientSocket(int port,  SocketType socketType, ProtocolType protocolType, string messageEnd)
         {
-            
-            _endPoint = new IPEndPoint(_ipAddress, port);
+            _mAddress = IPAddress.Parse("224.168.100.2");
+            _mEndPoint = new IPEndPoint(_mAddress, 23000);
+            _ipAddress = GetIPAddress();
+            _localEndPoint = new IPEndPoint(_ipAddress, port);
             _socketType = socketType;
             _protocolType = protocolType;
-            _socket = new Socket(_endPoint.AddressFamily, _socketType, _protocolType);
-            _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
-            _socket.EnableBroadcast = true;
-            _socket.Connect(_endPoint);
+            _socket = new Socket(AddressFamily.InterNetwork, _socketType, _protocolType);
+
+            MulticastOption mOption = new MulticastOption(_mAddress);
+
+            _socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership, mOption);
+            _socket.Bind(_localEndPoint);
             _isPolling = false;
             _messageEnd = messageEnd;
+        }
+
+        private IPAddress GetIPAddress()
+        {
+            return Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where((address) => address.IsIPv6LinkLocal == false).First();
         }
 
         private bool SendMessage(string message)
         {
             if (!_socket.Connected)
             {
-                _socket.Connect(_endPoint);
+                _socket.Connect(_mEndPoint);
                 if (!_socket.Connected)
                 {
                     return false;
